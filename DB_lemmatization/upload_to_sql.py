@@ -1,11 +1,14 @@
 #!/usr/bin/env python
 
+# uploading resulting lemmatized tweets in db
 
 #SBATCH --job-name=to_sql             
 #SBATCH --output=to_sql_%j.txt
 
 #SBATCH --partition=g100_usr_prod
 #SBATCH --time=05:00:00  
+
+
 
 import pandas as pd
 import sqlite3
@@ -28,15 +31,9 @@ for file in files_to_del:
     if file in parquet_files:
         parquet_files.remove(file)
 
-
 for file in parquet_files:
     file_name = f"/g100_work/IscrC_mental/data/lemmatized_tweets/lemmatized_tweets_post_cleaning/{file}"
     upload_parquet_to_sql(file_name, table_name, conn)
-
-
-
- 
-
 
 conn.close()
 

@@ -1,26 +1,17 @@
 #!/usr/bin/env python
 
 import pandas as pd
-import sqlite3
-import spacy
 from spacy.lang.it.stop_words import STOP_WORDS
 import string
 import re
-
-import os
-import pyarrow.parquet as pq
-
 
 stop_words = STOP_WORDS
 stop_words_to_remove = ['anni', 'anno']
 stop_words = [word for word in stop_words if word not in stop_words_to_remove]
 
-
-
 def cleaning(text):
     if pd.isna(text):
         return ""
-    
 
     words_new = [
         word[1:] if word.startswith('#') else word

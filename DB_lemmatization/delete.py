@@ -1,12 +1,10 @@
 #!/usr/bin/env python
 
-
+# Deleting empty files in result of lemmatization
 
 import pandas as pd
 import os
 import pyarrow.parquet as pq
-
-
 
 # Define the directory containing the parquet files. Replace this with the path to your parquet files.
 directory = '/g100_work/IscrC_mental/data/lemmatized_tweets/lemmatized_tweets_post_cleaning'

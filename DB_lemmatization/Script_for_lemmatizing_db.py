@@ -26,7 +26,6 @@ import time
 import concurrent.futures
 
 
-
 try:
     it_nlp_spacy = spacy.load('it_core_news_lg')
 except OSError:
