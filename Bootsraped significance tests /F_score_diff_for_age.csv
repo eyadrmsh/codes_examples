@@ -1,6 +1,0 @@
-,M3_bio_age,M3_bio_picture_age,XLM_bio_age,XLM_bio_picture_age,CV_bio_age
-M3_bio_age,0.1788,0.2503**,0.1626**,0.4203**,0.103**
-M3_bio_picture_age,,0.5382,-0.0877!,0.17**,-0.1473!
-XLM_bio_age,,,0.5186,0.2577**,-0.0596
-XLM_bio_picture_age,,,,0.6583,-0.3173!
-CV_bio_age,,,,,0.351
