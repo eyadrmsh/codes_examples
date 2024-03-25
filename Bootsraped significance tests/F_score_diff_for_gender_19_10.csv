@@ -1,0 +1,10 @@
+,M3_bio_male,M3_bio_picture_male,XLM_bio_male,XLM_bio_picture_male,flan_bio_male,faln_bio_tw_male,gpt_bio_male,gpt_bio_tw_male,cv_male
+M3_bio_male,0.5051,0.3063**,0.1313**,0.3664**,-0.0043,0.0359,0.0047,0.0477,0.2045**
+M3_bio_picture_male,,0.8114,-0.175!,0.0601,-0.3106!,-0.2704!,-0.3016!,-0.2586!,-0.1018!
+XLM_bio_male,,,0.6364,0.2351**,-0.1356!,-0.0954!,-0.1266!,-0.0836,0.0732
+XLM_bio_picture_male,,,,0.8715,-0.3707!,-0.3305!,-0.3617!,-0.3187!,-0.1619!
+flan_bio_male,,,,,0.5008,0.0402,0.009,0.052,0.2088**
+faln_bio_tw_male,,,,,,0.541,-0.0312,0.0118,0.1686**
+gpt_bio_male,,,,,,,0.5098,0.043,0.1998**
+gpt_bio_tw_male,,,,,,,,0.5528,0.1568**
+cv_male,,,,,,,,,0.7096
