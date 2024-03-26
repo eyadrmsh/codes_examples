@@ -15,3 +15,15 @@ Script for deleting empty batches after lemmatization
 # upload_to_sql.py
 
 Script to upload lemmatized tweets from parquet files to sql db
+
+# n_gram.py
+
+Script for creating n_gram matrix with top 50000 frequent n_grams
+
+# tfidf.py
+
+Script for creating tfidf matrices for each group
+
+# el_net_cv.py
+
+Script for getting baseline estimates of survey outcomes using elastic_net and cross validation
