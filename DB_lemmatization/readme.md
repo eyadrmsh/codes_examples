@@ -7,3 +7,11 @@ In this file I created function for downloading, cleaning, and after lemmatizing
 # Script_for_lemmatizing_db.py
 
 In this file you can see a script for leammtizing a db in batches adapted to SBATCH 
+
+# delete.py
+
+Script for deleting empty batches after lemmatization
+
+# upload_to_sql.py
+
+Script to upload lemmatized tweets from parquet files to sql db
