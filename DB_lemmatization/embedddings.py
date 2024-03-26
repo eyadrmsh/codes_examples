@@ -17,7 +17,11 @@ from sklearn.metrics.pairwise import cosine_similarity
 import time
 
 
-def download_n_grams():
+def download_tfidf():
+    '''
+    Downloading top_tfidfs as column names in final tfidf matrix, and deleting stop words from them.
+    While lemmatizing tweets, spacy lemmatization algorithms transform some words into stop words for italian language, despite stop words weredeleted before lematization
+    '''
     from spacy.lang.it.stop_words import STOP_WORDS as italian_stop_words
     from spacy.lang.en.stop_words import STOP_WORDS as english_stop_words
     stop_words_to_remove = ['anni', 'anno']
@@ -26,14 +30,20 @@ def download_n_grams():
     italian_stop_words = [word for word in italian_stop_words if word not in stop_words_to_remove]
     stop_words = english_stop_words+italian_stop_words
     column_names = pd.read_csv('/g100_work/IscrC_mental/data/tfidf/results_concatenate/tfidf_concatenate.csv', nrows=0).columns.tolist()
-    n_grams = [element for element in column_names if element not in stop_words]
-    return n_grams 
+    tfidf = [element for element in column_names if element not in stop_words]
+    return tfidf 
 
 def download_model():
+    '''
+    downloading sbert
+    '''
     model = SentenceTransformer('sentence-transformers/paraphrase-multilingual-mpnet-base-v2')
     return model
 
 def similarity_filter1(n_grams, model):
+    '''
+    deliting tfidfs with cosine simularity > 0,7, from 50 000 tfidfs 2813 were left 
+    '''
     embeddings = model.encode(n_grams, convert_to_numpy=True, normalize_embeddings=True)
     cosine_sim_matrix = cosine_similarity(embeddings)
     df = pd.DataFrame(cosine_sim_matrix)
