@@ -23,6 +23,9 @@ import pickle
 
 
 def data_aggregation():
+    '''
+    function for downloading data from db
+    '''
     conn = sqlite3.connect('/g100_work/IscrC_mental/data/database/mentalism_regioncoded_tweets.db')
     cursor = conn.cursor()
     join_query = f"""
@@ -39,6 +42,9 @@ def data_aggregation():
 
 
 def restriction_vocabulary(df):
+    '''
+    restricting vocabulary to top 50000 tfidf frequencies 
+    '''
     vectorizer = TfidfVectorizer(ngram_range=(1, 3), sublinear_tf=True, stop_words='english', min_df=0.001, max_df=0.75)
     documents = {}
     for group_id, group in df.groupby('group_id'):
@@ -46,13 +52,16 @@ def restriction_vocabulary(df):
     X = vectorizer.fit_transform(list(documents.values()))
     feature_names = vectorizer.get_feature_names_out()
     sum_tfidf_scores = np.sum(axis=0).A1
-    top_tfidf_indices = np.argsort(sum_tfidf_scores)[-10000:]
+    top_tfidf_indices = np.argsort(sum_tfidf_scores)[-50000:]
     top_tfidf_names = [feature_names[i] for i in top_tfidf_indices]
     return top_tfidf_names
 
 
 
 def tfidf_matrix(df, output_dir, vocabulary):
+    '''
+    creating a tfidf matrix considering as one document one tweets within group, and after taking its mean to get one row for a group
+    '''
     vectorizer = TfidfVectorizer(vocabulary=vocabulary)
     for group_id, group in df.groupby('group_id'):
         tfidf_matrix = vectorizer.fit_transform(group['text'])
@@ -63,6 +72,9 @@ def tfidf_matrix(df, output_dir, vocabulary):
 
 
 def tfidf_matrix_each_tweet(df, output_dir, vocabulary):
+    '''
+    making dfs for tfidf frequencies for each tweet within one group
+    '''
     vectorizer = TfidfVectorizer(vocabulary=vocabulary)
     for group_id, group in df.groupby('group_id'):
         tfidf_matrix = vectorizer.fit_transform(group['text'])
@@ -72,6 +84,9 @@ def tfidf_matrix_each_tweet(df, output_dir, vocabulary):
 
 
 def tfidf_matrix_concatenate(df, output_dir, vocabulary):
+    '''
+    creating a tfidf matrix considering as one document 'concatination' of all tweets amoung within one group
+    '''
     vectorizer = TfidfVectorizer(vocabulary=vocabulary)
     documents = {}
     for group_id, group in df.groupby('group_id'):
@@ -99,12 +114,15 @@ def main():
     
     restrict_start = time.time()
     tfidf_names  =restriction_vocabulary(df)
-    with open('/g100_work/IscrC_mental/data/tfidf/results_concatenate/tfidf_names_10000.pkl', 'wb') as f:
+    with open('/g100_work/IscrC_mental/data/tfidf/results_concatenate/tfidf_names.pkl', 'wb') as f:
         pickle.dump(tfidf_names, f)
 
+    tfidf_matrix_concatenate(df, args.output_dir, vocabulary)
+     restrict_time = time.time() - restrict_start
+    print(f"It took {restrict_time} seconds to restrict vocabulary and make tfidf matrices")
 
-    restrict_time = time.time() - restrict_start
-    print(f"It took {restrict_time} seconds to restrict vocabulary")
+    total_time = time.time() - start_time
+    print(f"It took {total_time} seconds to execute all code")
 
     total_time = time.time() - start_time
     print(f"It took {total_time} seconds to execute all code")
