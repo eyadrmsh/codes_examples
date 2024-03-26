@@ -22,6 +22,10 @@ from sklearn.feature_extraction.text import CountVectorizer
 import pickle
 
 def data_aggregation():
+    '''
+    Downloading data from db, merging tables
+    '''
+    
     conn = sqlite3.connect('/g100_work/IscrC_mental/data/database/mentalism_regioncoded_tweets.db')
     cursor = conn.cursor()
     join_query = f"""
@@ -38,6 +42,10 @@ def data_aggregation():
 
 
 def restrict_vocabulary(df):
+    '''
+    creating a ngram vocabulary and restricting it 
+    '''
+    
     vectorizer = CountVectorizer(ngram_range=(1, 3))
     X = vectorizer.fit_transform(df['text'])
     feature_names = vectorizer.get_feature_names_out()
@@ -49,6 +57,9 @@ def restrict_vocabulary(df):
     return top_ngram_names
 
 def vectorize_text(group, top_ngram_names):
+    '''
+    function for calculating n0gram frequencies within one group, used in fucntion n_gram_matrix later
+    '''
     vectorizer_top_ngrams = CountVectorizer(ngram_range=(1, 3), vocabulary=top_ngram_names)
     ngrams = vectorizer_top_ngrams.transform(group['text'])
     feature_names = vectorizer_top_ngrams.get_feature_names_out()
@@ -56,6 +67,9 @@ def vectorize_text(group, top_ngram_names):
     return group_ngrams_df
 
 def n_gram_matrix(df, output_dir, top_ngram_names):
+    '''
+    function for saving ngram matrix for each group
+    '''
     for group_id, group in df.groupby('group_id'):
         group_vectorized = vectorize_text(group, top_ngram_names)
         group_vectorized.to_csv(os.path.join(output_dir, f'ngram_freq_by_group_{group_id}.csv'), index=False)
@@ -80,8 +94,11 @@ def main():
     
     restrict_start = time.time()
     top_ngram_names = restrict_vocabulary(df)
-    with open(os.path.join(args.output_dir, 'top_ngram_names_all_dataset.pkl'), 'wb') as f:
+    with open(os.path.join(args.output_dir, 'top_ngram_names.pkl'), 'wb') as f:
         pickle.dump(top_ngram_names, f)
+    n_gram_matrix(df, args.output_dir, top_ngram_names)
+    restrict_time = time.time() - restrict_start
+    print(f"It took {restrict_time} seconds to restrict vocabulary and make n_gram matrices")
 
     total_time = time.time() - start_time
     print(f"It took {total_time} seconds to execute all code")
